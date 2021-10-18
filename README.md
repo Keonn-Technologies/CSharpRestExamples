@@ -1,6 +1,6 @@
 # Keonn C\# REST API examples
 
-&#8658; Please check our wiki: [http://wiki.keonn.com/advannet/development/csharp-rest-development](http://wiki.keonn.com/advannet/development/csharp-rest-development)
+&#8658; Please check our wiki: [https://wiki.keonn.com/software/advannet/development/rest-api-development/c-rest-development](https://wiki.keonn.com/software/advannet/development/rest-api-development/c-rest-development)
 
 These examples make use of AdvanNet's REST API to show some of the potential functionalities that can be implemented with REST operations
 
