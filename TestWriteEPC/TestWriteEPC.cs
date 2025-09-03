@@ -129,9 +129,9 @@ namespace TestWriteEPC
 
                     Stopwatch stopwatch2 = new Stopwatch();
                     stopwatch2.Start();
-                    this.util.CommissionTagOp(this.device, lepcs[i], newEPC, "", "", "", 1, false);
+                    this.util.CommissionTagOp(this.device, lepcs[i], newEPC, "", "", "", 1, true);
 
-                    Console.WriteLine("Writing an EPC last: " + stopwatch2.ElapsedMilliseconds.ToString() + " [ms]");
+                    Console.WriteLine("Writing an EPC (" + lepcs[i] + ") last: " + stopwatch2.ElapsedMilliseconds.ToString() + " [ms]");
                 }
 
                 Thread.Sleep(10000);

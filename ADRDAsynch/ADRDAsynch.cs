@@ -138,7 +138,7 @@ namespace ADRDAsynch
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                Console.WriteLine("bruh error " + e.StackTrace);
             }
 		    ConcurrentQueue<String> queue = new ConcurrentQueue<String>();
 		    List<String> tagDataList = new List<String>(); 
@@ -176,13 +176,13 @@ namespace ADRDAsynch
 
 					
 						foreach (String tagData in tagDataList) {
-						    //Console.WriteLine("epc: " + tagData);
+						    Console.WriteLine("epc: " + tagData);
 							hashset.Add(tagData);
 						}
 
 					    tagDataList.Clear();
                         
-						Console.WriteLine("read: " + hashset.ToList().ToString());
+						//Console.WriteLine("read: " + hashset.ToList().ToString());
                     }
                 }
             }

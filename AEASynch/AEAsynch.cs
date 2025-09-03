@@ -145,7 +145,7 @@ namespace AEAsynch
         {
         	try
             {
-                this.util.setDeviceMode(this.device, "Alarm mode", false);
+                this.util.setDeviceMode(this.device, "Alarm", false);
                 this.util.setReadMode(this.device, "EPC_EAS_ALARM", false);
                 util.startStopDevice(device, true, false);
             }

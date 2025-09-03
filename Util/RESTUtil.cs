@@ -1392,20 +1392,18 @@ namespace Util
         /// <exception cref="System.IO.IOException"></exception>
         public String getFileFromURL(String devicesURL)
         {
-            WebRequest wrGETURL = WebRequest.Create(devicesURL);
-            Stream objStream = wrGETURL.GetResponse().GetResponseStream();
-            StreamReader objReader = new StreamReader(objStream);
-
-            string sLine = "";
-            string final = "";
-
-            while (sLine != null)
+            var handler = new HttpClientHandler
             {
-                sLine = objReader.ReadLine();
-                final += sLine;
-            }
+                Credentials = new NetworkCredential("admin", "admin"),
+                PreAuthenticate = true
+            };
 
-            return final;
+            using var httpClient = new HttpClient(handler);
+            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("CSharpClient/1.0");
+            
+            var response = httpClient.GetAsync(devicesURL).Result;
+            response.EnsureSuccessStatusCode();
+            return response.Content.ReadAsStringAsync().Result;
         }
 
         /// <summary>
@@ -1424,30 +1422,38 @@ namespace Util
         /// <exception cref="System.ArgumentException"></exception>
         /// <exception cref="System.OutOfMemoryException"></exception>
         /// <exception cref="System.IO.IOException"></exception>
+
         private string getFileFromURL(string url, string postData)
         {
-            System.Net.WebRequest req = System.Net.WebRequest.Create(url);
-
-            req.ContentType = "text/xml";
-            req.Method = "PUT";
-
-            byte[] bytes = System.Text.Encoding.ASCII.GetBytes(postData);
-            req.ContentLength = bytes.Length;
-
-            using (Stream os = req.GetRequestStream())
+            var handler = new HttpClientHandler
             {
-                os.Write(bytes, 0, bytes.Length);
-            }
+                Credentials = new NetworkCredential("admin", "admin"),
+                PreAuthenticate = true
+            };
 
-            using (System.Net.WebResponse resp = req.GetResponse())
+            using (var httpClient = new HttpClient(handler))
             {
-                if (resp == null)
-                    return null;
+                httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("CSharpClient/1.0");
 
-                using (System.IO.StreamReader sr = new System.IO.StreamReader(resp.GetResponseStream()))
+                httpClient.DefaultRequestHeaders.ExpectContinue = false;
+
+                var request = new HttpRequestMessage(HttpMethod.Put, url)
                 {
-                    return sr.ReadToEnd().Trim();
+                    Version = HttpVersion.Version10, 
+                    Content = new StringContent(postData, Encoding.ASCII, "text/xml")
+                };
+
+                var response = httpClient.SendAsync(request).Result;
+
+                string responseBody = response.Content.ReadAsStringAsync().Result;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new HttpRequestException(
+                        $"Request failed with status {response.StatusCode} and message: {responseBody}");
                 }
+
+                return responseBody;
             }
         }
 
